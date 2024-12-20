@@ -164,6 +164,12 @@ build {
   provisioner "powershell" {
     elevated_password = "password"
     elevated_user     = "Administrator"
+    script            = "./extra/scripts/windows/shared/phase-ua2.os.ps1"
+  }
+
+  provisioner "powershell" {
+    elevated_password = "password"
+    elevated_user     = "Administrator"
     script            = "./extra/scripts/windows/shared/phase-5d.windows-compress.ps1"
   }
 
@@ -174,16 +180,6 @@ build {
 
   provisioner "powershell" {
     inline = ["Write-Output Phase-5-Deprovisioning", "if (!(Test-Path -Path $Env:SystemRoot\\system32\\Sysprep\\unattend.xml)){ Write-Output 'No file';exit (10)}", "& $Env:SystemRoot\\System32\\Sysprep\\Sysprep.exe /oobe /generalize /shutdown /quiet /unattend:C:\\Windows\\system32\\sysprep\\unattend.xml"]
-  }
-
-  post-processor "vagrant" {
-      keep_input_artifact = true
-      provider_override   = "hyperv"
-  }
-
-  post-processor "vagrant" {
-      keep_input_artifact = true
-      provider_override   = "virtualbox"
   }
 
 }
